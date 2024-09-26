@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Book</title>
+    <link rel="stylesheet" href="my.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>View Book</h1>
+    <p><strong>Title:</strong> <span id="book-title"></span></p>
+    <p><strong>Author:</strong> <span id="book-author"></span></p>
+    <p><strong>Year:</strong> <span id="book-year"></span></p>
+    <p><strong>ISBN:</strong> <span id="book-isbn"></span></p>
+
+    <button class="btn btn-warning" onclick="editBook()">Edit</button>
+    <button class="btn btn-danger" onclick="deleteBook()">Delete</button>
+    <button class="btn btn-secondary" onclick="window.location.href='index.html'">Back to List</button>
+</div>
+
+<script>
+    // Retrieve the book id from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookId = parseInt(urlParams.get('id'), 10);
+    const books = JSON.parse(localStorage.getItem('books')) || [];
+    const book = books.find(b => b.id === bookId);
+
+    // Display book details in the HTML
+    document.getElementById('book-title').innerText = book.title;
+    document.getElementById('book-author').innerText = book.author;
+    document.getElementById('book-year').innerText = book.year;
+    document.getElementById('book-isbn').innerText = book.isbn;
+
+    // Delete function
+    function deleteBook() {
+        if (confirm("Are you sure you want to delete this book?")) {
+            const updatedBooks = books.filter(b => b.id !== bookId);
+            localStorage.setItem('books', JSON.stringify(updatedBooks));
+            alert("Book deleted.");
+            window.location.href = 'index.html'; // Redirect to index.html after deletion
+        }
+    }
+
+    // Edit function
+    function editBook() {
+        window.location.href = `edit.html?id=${bookId}`;
+    }
+</script>
+</body>
+</html>
